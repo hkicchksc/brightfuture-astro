@@ -79,6 +79,52 @@ const paragraphs = description.trim().split('\n').map(p => p.trim()).filter(p =>
   .awardee-consultant { margin-top: 40px; padding: 30px; background: #f5f5f5; border-radius: 8px; }
   .consultant-title { font-size: 13px; color: #806203; margin-bottom: 10px; }
   .consultant-quote { font-size: 15px; line-height: 1.8; color: #333; margin: 0; }
+
+  @media (min-width: 769px) {
+    .awardee-detail {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: 66.666vw 33.334vw;
+      gap: 0;
+      align-items: start;
+    }
+    .awardee-cover {
+      position: sticky;
+      top: 89px;
+      grid-column: 1;
+      z-index: 10;
+      width: 66.666vw;
+      height: calc(100vh - 89px);
+      background: transparent;
+      border-radius: 0;
+    }
+    .cover-img {
+      object-fit: contain;
+    }
+    .cover-overlay {
+      border-radius: 0;
+    }
+    .cover-info {
+      width: 100%;
+      padding: 32px 28px;
+    }
+    .awardee-body {
+      grid-column: 2;
+      max-width: none;
+      margin: 0;
+      padding: 40px 28px 60px;
+    }
+    .awardee-content {
+      margin-bottom: 32px;
+    }
+    .awardee-gallery {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+  }
+
   @media (max-width: 768px) {
     .awardee-cover { height: 300px; }
     .cover-info { padding: 24px;}

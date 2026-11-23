@@ -44,7 +44,10 @@ const awardees = files
   <div class="awardee-list">
     {awardees.map(a => (
       <a href={`/awardees/${year}/${a.name}`} class="awardee-item">
-        <img src={a.photo} alt={a.name} class="avatar" />
+        <div class="avatar-wrap">
+          <div class="awardee-avatar-loader" role="status" aria-label="Loading image"></div>
+          <img src={a.photo} alt={a.name} class="avatar" loading="lazy" decoding="async" />
+        </div>
         <div class="info">
           <h3>{a.name}</h3>
           <span class="class">{a.class}{a.category ? ` · ${a.category}` : ''}</span>
@@ -80,13 +83,43 @@ const awardees = files
     border: 1px solid #e8e4dc;
   }
   .avatar {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    opacity: 0;
+    transition: opacity 0.35s ease;
   }
+  .avatar-wrap { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+  .awardee-item.image-loaded .avatar { opacity: 1; }
+  .awardee-avatar-loader {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #f1eee6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+  .awardee-item.image-loaded .awardee-avatar-loader { opacity: 0; visibility: hidden; }
+  .loader-spinner::after { content: ''; width: 24px; height: 24px; border: 3px solid rgba(128,98,3,0.18); border-top-color: #806203; border-radius: 50%; animation: awardee-loader-spin 0.8s linear infinite; }
+  .loader-dots::after { content: ''; width: 8px; aspect-ratio: 1; border-radius: 50%; background: #806203; box-shadow: 14px 0 #806203, -14px 0 #806203; animation: awardee-loader-dots 1s infinite alternate; }
+  .loader-ring::after { content: ''; width: 28px; height: 28px; border: 3px dotted #806203; border-radius: 50%; animation: awardee-loader-spin 1.2s linear infinite; }
+  .loader-bars::after { content: ''; width: 6px; height: 20px; background: #806203; box-shadow: -10px 0 rgba(128,98,3,0.35), 10px 0 rgba(128,98,3,0.65); animation: awardee-loader-bars 0.9s ease-in-out infinite alternate; }
+  .loader-pulse::after { content: ''; width: 24px; height: 24px; border-radius: 50%; background: #806203; animation: awardee-loader-pulse 0.8s ease-in-out infinite; }
+  .loader-square::after { content: ''; width: 18px; height: 18px; border: 3px solid #806203; animation: awardee-loader-square 1s ease-in-out infinite; }
+  .loader-orbit::after { content: ''; width: 28px; height: 28px; border: 2px solid rgba(128,98,3,0.2); border-top-color: #806203; border-right-color: #806203; border-radius: 50%; animation: awardee-loader-spin 0.9s linear infinite; }
+  .loader-wave::after { content: ''; width: 6px; height: 22px; border-radius: 4px; background: #806203; box-shadow: -9px 0 rgba(128,98,3,0.55), 9px 0 rgba(128,98,3,0.55); animation: awardee-loader-wave 0.8s ease-in-out infinite alternate; }
+  @keyframes awardee-loader-spin { to { transform: rotate(360deg); } }
+  @keyframes awardee-loader-dots { 100% { box-shadow: 14px 0 rgba(128,98,3,0.25), -14px 0 rgba(128,98,3,0.25); } }
+  @keyframes awardee-loader-bars { to { height: 34px; box-shadow: -10px 0 rgba(128,98,3,0.65), 10px 0 rgba(128,98,3,0.35); } }
+  @keyframes awardee-loader-pulse { 50% { transform: scale(0.45); opacity: 0.45; } }
+  @keyframes awardee-loader-square { 50% { transform: rotate(135deg); border-radius: 50%; } }
+  @keyframes awardee-loader-wave { to { height: 8px; } }
   .info { flex: 1; }
   .info h3 { font-size: 18px; color: #20201E; margin: 0 0 5px; font-weight: 500; }
   .info .names { font-size: 14px; color: #5a4a2e; margin: 3px 0; line-height: 1.5; }
@@ -104,3 +137,30 @@ const awardees = files
     .info .names { font-size: 13px; }
   }
 </style>
+
+<script>
+  const loaderClasses = [
+    'loader-spinner',
+    'loader-dots',
+    'loader-ring',
+    'loader-bars',
+    'loader-pulse',
+    'loader-square',
+    'loader-orbit',
+    'loader-wave'
+  ];
+  const loaders = [...loaderClasses].sort(() => Math.random() - 0.5);
+
+  document.querySelectorAll('.awardee-item').forEach((item, index) => {
+    const loader = item.querySelector('.awardee-avatar-loader');
+    const img = item.querySelector('.avatar');
+    if (loader) loader.classList.add(loaders[index % loaders.length]);
+
+    const markLoaded = () => item.classList.add('image-loaded');
+    if (img) {
+      img.addEventListener('load', markLoaded, { once: true });
+      img.addEventListener('error', markLoaded, { once: true });
+      if (img.complete) markLoaded();
+    }
+  });
+</script>

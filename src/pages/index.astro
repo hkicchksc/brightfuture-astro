@@ -259,12 +259,10 @@ for (const year of years) {
     }
   }
   :global(.gallery-loader.loader-orbit) {
-    &::before {
-      content: ''; width: 40px; height: 40px; border: 2px solid rgba(128,98,3,0.2); border-radius: 50%;
-    }
     &::after {
-      content: ''; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: #806203;
-      transform-origin: 20px 20px; animation: loader-orbit 0.9s linear infinite;
+      content: ''; width: 36px; height: 36px; border: 2px solid rgba(128,98,3,0.2);
+      border-top-color: #806203; border-right-color: #806203; border-radius: 50%;
+      animation: loader-spin 0.9s linear infinite;
     }
   }
   :global(.gallery-loader.loader-wave) {
@@ -279,7 +277,6 @@ for (const year of years) {
   @keyframes loader-bars { to { height: 46px; box-shadow: -14px 0 rgba(128,98,3,0.65), 14px 0 rgba(128,98,3,0.35); } }
   @keyframes loader-pulse { 50% { transform: scale(0.45); opacity: 0.45; } }
   @keyframes loader-square { 50% { transform: rotate(135deg); border-radius: 50%; } }
-  @keyframes loader-orbit { to { transform: rotate(360deg) translateX(20px) rotate(-360deg); } }
   @keyframes loader-wave { to { height: 12px; } }
   :global(.gallery-item figcaption) {
     position: absolute; inset: 0;
@@ -328,6 +325,7 @@ for (const year of years) {
     .gallery h2 { margin-bottom: 30px; }
     .gallery-grid { grid-template-columns: 1fr; gap: 0; max-width: 100%; }
     :global(.gallery-item) { border-radius: 0; }
+    :global(.gallery-image-wrap) { border-radius: 0; }
     :global(.gallery-item img) { border-radius: 0; }
     :global(.gallery-item figcaption) {
       opacity: 1 !important;
